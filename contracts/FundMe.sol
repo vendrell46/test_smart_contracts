@@ -8,9 +8,13 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 contract FundMe {
     uint256 public minimumUsd = 50 * 1e18;
 
+    address[] public funders;
+    mapping (address => uint256) public addressToAmountFunded; 
+
     function fund() public payable {
         require(getConversionRate(msg.value) >= minimumUsd, "Didn't send enough");
-        // 18 decimals
+        funders.push(msg.sender);
+        addressToAmountFunded[msg.sender] = msg.value;
     }
 
     function getPrice() public view returns(uint256) {
